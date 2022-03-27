@@ -31,4 +31,5 @@ public class SampleService {
 		
 		sampleRepository.insertSampleUserToRepository(em, sampleUser);
 	}
+	
 }

@@ -41,7 +41,7 @@ public class SampleController {
 		String age = request.getParameter("age");
 		String zodiac = request.getParameter("zodiac");
 //		name = sampleService.testSampleService(name);
-//		sampleService.testInsertSampleUserService(name, age, zodiac);
+		sampleService.testInsertSampleUserService(name, age, zodiac);
 		map.put("name", name);
 		map.put("age", age);
 		map.put("zodiac", zodiac);
