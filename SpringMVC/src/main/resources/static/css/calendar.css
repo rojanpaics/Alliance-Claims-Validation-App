@@ -1,0 +1,5 @@
+#calendarContainer,
+#organizerContainer {
+  float: left;
+  margin: 5px;
+}
