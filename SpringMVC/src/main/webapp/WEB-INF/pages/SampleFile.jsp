@@ -10,6 +10,7 @@
 	<h1>This is a sample page by emerson</h1>
 	<h2>This is sample subtitle</h2>
 	
+	
 	<form action="/sample/testdata" method="POST">
 		<label>Name</label>
 		<input name="name"/><br/>
@@ -18,6 +19,7 @@
 		<label>Zodiac Sign</label>
 		<input name="zodiac"/>
 		<button type="submit">SUBMIT</button>
+		<h2><a href="/sample/new/${name}}">Add new</a></h2>
 	</form>
 </body>
 </html>

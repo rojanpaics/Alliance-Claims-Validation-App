@@ -5,25 +5,34 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.springboot.service.SampleService;
 
 // http://localhost:8080/sample
-@Controller // if using @Controller, we are returning a view → JSP or HTML
+ // if using @Controller, we are returning a view → JSP or HTML
 // @RestController // if using @RestController, we are returning data only
-@RequestMapping("/sample")
+@Controller
+//@RequestMapping("/sample")
 public class SampleController {
 	
 	@Autowired
 	private SampleService sampleService;
 	
 	// http://localhost:8080/sample/test
-	@RequestMapping("/test")
+	@GetMapping("/test")
 	public String getSampleTest() {
 		// this request is for returning static web
 		return "SampleFile";
+	}
+	
+	@GetMapping("/new")
+	public String getNew() {
+		return "Hello";
 	}
 	
 	@RequestMapping("/testCustomData")
