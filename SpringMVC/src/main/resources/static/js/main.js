@@ -1,3 +1,0 @@
-function testButton() {
-	alert("HI!");
-}
