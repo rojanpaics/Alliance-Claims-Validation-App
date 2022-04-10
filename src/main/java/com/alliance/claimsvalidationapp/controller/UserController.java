@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -25,8 +28,36 @@ public class UserController {
         return modelAndView;
     }
 
-    @GetMapping("/")
+    @GetMapping("/login")
     public String indexPage(){
-        return "index";
+        return "login";
     }
+
+    @PostMapping("/homepage")
+    public ModelAndView loginUserController(@ModelAttribute User user, HttpSession httpSession){
+        ModelAndView modelAndView = new ModelAndView();
+        User sessionUser = userService.loginUserService(user.getEmail(), user.getPassword());
+        modelAndView.addObject("user", sessionUser);
+
+        httpSession.setAttribute("User", sessionUser);
+
+        if(sessionUser.getUsertype().contains("Accounting")){
+            modelAndView.setViewName("accountingPage");
+        } else {
+            modelAndView.setViewName("employeePage");
+        }
+        return modelAndView;
+    }
+
+    @GetMapping("/logout")
+    public String logoutUserController(HttpServletRequest request){
+        HttpSession sessionUser = request.getSession(false);
+        if (sessionUser != null) {
+            sessionUser.invalidate();
+        }
+
+        return "login";
+    }
+
+
 }
