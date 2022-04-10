@@ -69,8 +69,8 @@ public class UserService {
         return userRepository.save(oldUser);
     }
 
-//    public List<User> getAllUserService(){
-//
-//    }
+    public List<User> getAllUserService(){
+        return userRepository.findAll();
+    }
 
 }

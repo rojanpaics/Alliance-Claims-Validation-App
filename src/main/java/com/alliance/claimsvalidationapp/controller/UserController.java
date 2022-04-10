@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -35,9 +36,11 @@ public class UserController {
 
     @PostMapping("/homepage")
     public ModelAndView loginUserController(@ModelAttribute User user, HttpSession httpSession){
+        List<User> listOfUser= userService.getAllUserService();
         ModelAndView modelAndView = new ModelAndView();
         User sessionUser = userService.loginUserService(user.getEmail(), user.getPassword());
         modelAndView.addObject("user", sessionUser);
+        modelAndView.addObject("listOfUsers", listOfUser);
 
         httpSession.setAttribute("User", sessionUser);
 
