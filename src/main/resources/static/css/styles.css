@@ -92,6 +92,9 @@ input.loginField {
     color: #9F9F9F;
     font-size: 14px;
 }
+.modal-body-label {
+    color: #F91212;
+}
 
 .user_type {
     border-radius: 15px;
@@ -100,4 +103,31 @@ input.loginField {
 
 .logout {
     text-decoration: none;
+}
+
+.label-modal{
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.modalField {
+    border-radius: 10px;
+    font-size: 14px;
+    background-color: #F2F2F2;
+    border-color: #b1b1b1;
+    border: none;
+}
+
+.cancelModal {
+    border: none;
+    background-color: #fff;
+    margin: 10px;
+}
+
+.confirmModal {
+    padding: 10px 15px;
+    background-color: #F91212;
+    color: #fff;
+    border-radius: 500px;
+    border: none;
 }

@@ -60,26 +60,42 @@
     <div class="col-8">
 
     </div>
-
     <!-- Modal edit user triggered by editSessionUser-->
     <div class="modal fade center" id="editSessionUserModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h6>Edit your profile</h6>
-                    <button type="button" class="close closeModalButton" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
                 </div>
-                <div class="modal-body container">
-                    <p class="mb-2 modal-body-label">Edit name</p>
-                    <div class="mb-2">
-                        <input class="loginField" type="text" placeholder="name"></input>
+                <div class="modal-body">
+                    <div class="mx-3">
+                        <p class="mb-2 modal-body-label">Edit name</p>
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <div class="me-1">
+                                <label for="fNameInput" class="ps-2 m-0 label-modal text-muted">First name</label>
+                                <input id="fNameInput" class="modalField px-3 py-1 w-100" type="text" placeholder="John" th:name="firstName"/>
+                            </div>
+                            <div class="ms-1">
+                                <label for="fNameInput" class="ps-2 m-0 label-modal text-muted">Last name</label>
+                                <input id="lNameInput"class="modalField px-3 py-1 w-100" type="text" placeholder="Doe" th:name="lastName"/>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <p class="mb-2 modal-body-label">Change password</p>
+
+                        <label for="currentPass" class="ps-2 m-0 label-modal text-muted">Current password</label>
+                        <input id="currentPass" class="modalField px-3 py-1 w-100" type="text" placeholder="Your current password" th:name="currentPass"/>
+
+                        <label for="newPass" class="ps-2 mt-3 mb-0 label-modal text-muted">New password</label>
+                        <input id="newPass" class="modalField px-3 py-1 w-100 mb-1" type="password" placeholder="New password" th:name="newPass"/>
+
+                        <label for="confirmPass" class="ps-2 m-0 label-modal text-muted">Confirm password</label>
+                        <input id="confirmPass" class="modalField px-3 py-1 w-100" type="password" placeholder="Confirm password" th:name="confirmPass"/>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="cancelModal" data-dismiss="modal">Cancel</button>
-                    <button id="deleteSchedule" class="saveLaundromat">Continue</button>
+                    <button id="deleteSchedule" class="confirmModal">Continue</button>
                 </div>
             </div>
         </div>
