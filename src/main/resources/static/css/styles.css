@@ -1,0 +1,103 @@
+
+.loginDiv {
+    margin: 20vh auto;
+    width: 500px;
+    border-radius: 20px;
+}
+
+.logoHolder {
+    border-radius: 5px;
+    width: 100px;
+    height: 100px;
+    margin-top: -90px;
+}
+
+input.loginField {
+
+    border: none;
+    border-radius: 50px;
+    background-color: #F2F2F2;
+    border-color: #b1b1b1;
+    width: 80%;
+}
+
+.titleHeader{
+    color: #FE0000;
+    text-align: center;
+}
+
+.loginbtn {
+    background-color: #F91212;
+    border: none;
+    border-radius: 20px;
+
+}
+
+.header{
+    height: 100px;
+}
+
+.pageLogo {
+    height: 50px;
+    width: 50px;
+    border-radius: 10px;
+}
+
+.logout {
+    color: #F91212;
+}
+
+.accounting-profile-wrap {
+    height: 150px;
+}
+
+.user-list-wrap {
+    height: 350px;
+}
+
+.sectionLabel {
+    font-size: 14px;
+    color: #F91212;
+}
+
+.profile-info {
+    border-radius: 15px;
+}
+
+.userList-info{
+    border-radius: 15px;
+    max-height: 330px;
+    min-height: 330px;
+}
+
+.profile-action {
+    height: 18px;
+    width: 70px;
+}
+
+.profile-act {
+    height: 15px;
+    width: 15px;
+}
+
+.id-display {
+    color: #FF8D8D;
+}
+
+.name-display {
+    color: #4F4F4F;
+    font-size: 16px;
+}
+.email-display {
+    color: #9F9F9F;
+    font-size: 14px;
+}
+
+.user_type {
+    border-radius: 15px;
+    width: 50px;
+}
+
+.logout {
+    text-decoration: none;
+}
