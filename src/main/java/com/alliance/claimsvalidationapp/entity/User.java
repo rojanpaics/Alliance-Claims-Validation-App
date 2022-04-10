@@ -33,7 +33,7 @@ public class User {
     @Column(name = "usertype", columnDefinition = "VARCHAR(50)")
     private String usertype;
 
-    @Column(name = "userStatus", columnDefinition = "VARCHAR(50)")
+    @Column(name = "user_status", columnDefinition = "VARCHAR(50)")
     private String userStatus;
 
 }

@@ -55,9 +55,6 @@ public class UserController {
         if (sessionUser != null) {
             sessionUser.invalidate();
         }
-
         return "login";
     }
-
-
 }
