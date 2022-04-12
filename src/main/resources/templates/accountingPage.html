@@ -20,24 +20,26 @@
             <p class="sectionLabel fw-bold mb-2">Profile</p>
             <div class="profile-info bg-white shadow">
                 <div class="profile-header px-4 pt-3 pb-1 d-flex justify-content-between align-items-center">
-                    <p class="id-display " th:text="${'acctng-' + session.User.id}"></p>
-                    <div class="profile-action d-flex justify-content-between align-items-center">
-                        <img class="profile-act" id="editSessionUser" data-toggle="modal"
-                             data-target="#editSessionUserModal" th:src="@{/images/edit.svg}" alt="">
-                        <img class="profile-act" id="deleteSessionUser" th:src="@{/images/delete.svg}" alt="">
-                    </div>
+                    <p class="id-display m-0" th:text="${'acctng-' + session.User.id}"></p>
+                    <img class="profile-act" id="deleteSessionUser" data-toggle="modal" data-target="#deleteSessionUserModal" th:src="@{/images/delete.svg}" alt="">
                 </div>
-                <div class="profile-body px-4 pb-2">
-                    <p class="name-display fw-bold mb-0"
-                       th:text="${session.User.firstName +' '+session.User.lastName}"></p>
-                    <p class="email-display fw-light" th:text="${session.User.email}"></p>
+                <div class="profile-body px-4 pb-3">
+                    <div class="d-flex align-items-center">
+                        <p class="name-display fw-bold mb-0 me-3"
+                           th:text="${session.User.firstName +' '+session.User.lastName}"></p>
+                        <img class="profile-act" id="editSessionUserName" data-toggle="modal"
+                             data-target="#editSessionUserNameModal" th:src="@{/images/edit.svg}" alt="">
+                    </div>
+                    <p class="email-display fw-light mb-3" th:text="${session.User.email}"></p>
+                    <button id="editSessionUserPassword" class="sessionPassChange py-1 px-3" data-toggle="modal"
+                            data-target="#editSessionUserPasswordModal">Change password</button>
                 </div>
             </div>
         </div>
         <div class="user-list-wrap mt-4 pt-2">
             <div class="d-flex justify-content-between mb-2">
                 <p class="sectionLabel fw-bold mb-0">User list</p>
-                <img class="profile-act me-4" th:src="@{/images/add.svg}" alt="">
+                <img id="addUser" class="profile-act me-4" th:src="@{/images/add.svg}" data-toggle="modal" data-target="#addUserModal" alt="">
             </div>
             <div class="userList-info bg-white px-4 py-2 shadow">
                 <div class="d-flex justify-content-between align-items-center mt-2">
@@ -49,10 +51,20 @@
                         <option value="accounting">Accounting</option>
                     </select>
                 </div>
-                <div>
-                    <ul>
-                        <li th:each = "user : ${listOfUsers}"><p th:text="${user.firstName}"></p></li>
-                    </ul>
+                <div class="user-wrap mt-3">
+                    <div class="userData-wrap px-3 pt-2" th:each="userData : ${listOfUsers}">
+                        <div class="borderIni d-flex justify-content-between pb-2">
+                            <div class="userData-credentials">
+                                <p class="userData-name fw-bold m-0" th:text="${userData.firstName +' '+userData.lastName}"></p>
+                                <p class="userData-email email-display fw-normal m-0" th:text="${userData.email}"></p>
+                                <p class="userData-userType fw-light m-0" th:text="${userData.usertype}"></p>
+                            </div>
+                            <img class="profile-act" id="deleteUser" th:src="@{/images/delete.svg}" alt="">
+                        </div>
+                    </div>
+<!--                    <ul>-->
+<!--                        <li th:each = "user : ${listOfUsers}"><p th:text="${user.firstName}"></p></li>-->
+<!--                    </ul>-->
                 </div>
             </div>
         </div>
@@ -60,12 +72,14 @@
     <div class="col-8">
 
     </div>
-    <!-- Modal edit user triggered by editSessionUser-->
-    <div class="modal fade center" id="editSessionUserModal">
+
+
+    <!-- Modal edit user name triggered by editSessionUserName-->
+    <div class="modal fade center" id="editSessionUserNameModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6>Edit your profile</h6>
+                    <h6>Edit your name</h6>
                 </div>
                 <div class="modal-body">
                     <div class="mx-3">
@@ -73,14 +87,32 @@
                         <div class="mb-2 d-flex justify-content-between align-items-center">
                             <div class="me-1">
                                 <label for="fNameInput" class="ps-2 m-0 label-modal text-muted">First name</label>
-                                <input id="fNameInput" class="modalField px-3 py-1 w-100" type="text" placeholder="John" th:name="firstName"/>
+                                <input id="fNameInput" class="modalField px-3 py-1 w-100" type="text" placeholder="John" th:value="${session.User.firstName}" th:name="firstName"/>
                             </div>
                             <div class="ms-1">
                                 <label for="fNameInput" class="ps-2 m-0 label-modal text-muted">Last name</label>
-                                <input id="lNameInput"class="modalField px-3 py-1 w-100" type="text" placeholder="Doe" th:name="lastName"/>
+                                <input id="lNameInput"class="modalField px-3 py-1 w-100" type="text" placeholder="Doe" th:value="${session.User.lastName}" th:name="lastName"/>
                             </div>
                         </div>
-                        <hr class="my-4">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="cancelModal" data-dismiss="modal">Cancel</button>
+                    <button id="editProfileNameButton" class="confirmModal">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal edit user password triggered by editSessionUserPassword-->
+    <div class="modal fade center" id="editSessionUserPasswordModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6>Edit your passowrd</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="mx-3">
                         <p class="mb-2 modal-body-label">Change password</p>
 
                         <label for="currentPass" class="ps-2 m-0 label-modal text-muted">Current password</label>
@@ -95,19 +127,155 @@
                 </div>
                 <div class="modal-footer">
                     <button class="cancelModal" data-dismiss="modal">Cancel</button>
-                    <button id="deleteSchedule" class="confirmModal">Continue</button>
+                    <button id="editProfilePasswordButton" class="confirmModal">Continue</button>
                 </div>
             </div>
         </div>
     </div>
-</section>
 
+    <!-- Modal delete Account triggered  #deleteSessionUser -->
+    <div class="modal fade center" id="deleteSessionUserModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6>Delete your profile</h6>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2 modal-body-label text-center my-2">Are you sure you want to delete your account?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="cancelModal" data-dismiss="modal">Cancel</button>
+                    <button id="deleteProfileButton" class="confirmModal">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal add user triggered by #addUser-->
+    <div class="modal fade center" id="addUserModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/user/addUser}" method="POST">
+                    <div class="modal-header">
+                        <h6>Add Account</h6>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mx-3">
+                            <div class="mb-2 d-flex justify-content-between align-items-center">
+                                <div class="me-1">
+                                    <label for="fNameInputAdd" class="ps-2 m-0 label-modal text-muted">First name</label>
+                                    <input id="fNameInputAdd" class="modalField px-3 py-1 w-100" type="text" placeholder="John" th:name="firstName"/>
+                                </div>
+                                <div class="ms-1">
+                                    <label for="fNameInputAdd" class="ps-2 m-0 label-modal text-muted">Last name</label>
+                                    <input id="lNameInputAdd"class="modalField px-3 py-1 w-100" type="text" placeholder="Doe" th:name="lastName"/>
+                                </div>
+                            </div>
+
+                            <label for="emailAdd" class="ps-2 mt-3 mb-0 label-modal text-muted">Email</label>
+                            <input id="emailAdd" class="modalField px-3 py-1 w-100 mb-3" type="email" placeholder="example@gmail.com" th:name="email"/>
+
+                            <label for="confirmPass" class="ps-2 m-0 label-modal text-muted">Password</label>
+                            <input id="passAdd" class="modalField px-3 py-1 w-100 mb-3" type="password" placeholder="Password" th:name="password"/>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3 my-4">
+                                <label for="usertypeAdd" class="ps-2 m-0 label-modal text-muted">User type</label>
+                                <select id="usertypeAdd" th:name="usertype" class="modal-dropdown w-75 ms-2 px-2 py-1">
+                                    <option value="Sales">Sales Team</option>
+                                    <option value="Tech">Technical Support</option>
+                                    <option value="Accounting">Accounting</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancelModal" data-dismiss="modal">Cancel</button>
+                        <input type="submit" id="addAccountButton" class="confirmModal" value="Continue"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 <script type="text/javascript">
+var sessionID = $('.id-display').html().replace("acctng-", "");
 
+<!-- Removing own record in the user list -->
+    $(document).ready(function(){
+        $('.userData-email').each(function(){
+            if($(this).html() === $('.email-display').html()){
+                $(this).parent().parent().parent().hide();
+            }
+        });
+    });
+
+<!-- Deleting session user action -->
+    $("#deleteProfileButton").click(function(){
+        $.ajax({
+          url: "/user/deleteSessionUser",
+          type: "POST",
+          data:{
+            id: sessionID
+            },
+          success: function(data)
+          {
+            window.location = '/user/login';
+          }
+       });
+    });
+
+ <!-- Editing session user password action -->
+        var fNameEdit = $('#fNameInput').val();
+        var lNameEdit = $('#lNameInput').val();
+
+    $('#editProfilePasswordButton').click(function(){
+        var curPassEdit = $('#currentPass').val();
+        var newPassEdit = $('#newPass').val();
+        var conPassEdit = $('#confirmPass').val();
+
+
+        if(curPassEdit != null){
+            if(newPassEdit == conPassEdit && newPassEdit != ""){
+                $.ajax({
+                    url: "/user/validateSessionUserPassword",
+                    type: "POST",
+                    data: {
+                        id: sessionID,
+                        password: curPassEdit
+                    },
+                    success: function(data){
+                        if(data == "true"){
+                        alert(data);
+                             $.ajax({
+                                url: "/user/editSessionUserPassword",
+                                type: "POST",
+                                data: {
+                                    id: sessionID,
+                                    password: newPassEdit
+                                },
+                                success: function(data){
+                                    if(data != null){
+                                        alert("Password changed. You are prompted to login again after this.");
+                                        window.location = '/user/login';
+                                    }
+                                }
+                            });
+                        } else {
+                            alert("Wrong input on current password!");
+                        }
+                    }
+                });
+            } else {
+                alert("Password does not match");
+            }
+        } else {
+            alert("Wrong input on current password!1");
+        }
+    });
 </script>
 </html>

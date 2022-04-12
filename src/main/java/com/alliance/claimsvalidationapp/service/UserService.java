@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,33 +31,35 @@ public class UserService {
         throw new IllegalStateException("User not found!");
     }
 
-    public User updateUserService(Long id, User user){
-        User oldUser = null;
-        if(userRepository.findById(id).isPresent()){
-            oldUser = userRepository.findById(id).get();
 
-            if((user.getFirstName() == null || user.getLastName() == null) && user.getPassword() == null){
-                throw new IllegalStateException("Please fill all the fields");
-            }
 
-            if(user.getPassword() != null && (user.getFirstName() == null && user.getLastName() == null)){
-                oldUser.setPassword(user.getPassword());
-            }
-            if (user.getFirstName() != null && user.getLastName() != null && (user.getPassword() == null)){
-                oldUser.setFirstName(user.getFirstName());
-                oldUser.setLastName(user.getLastName());
-            }
-
-            if (user.getFirstName() != null && user.getLastName() != null && user.getPassword() != null) {
-                oldUser.setFirstName(user.getFirstName());
-                oldUser.setLastName(user.getLastName());
-                oldUser.setPassword(user.getPassword());
-            }
-        } else {
-            throw new IllegalStateException("User not found");
-        }
-        return userRepository.save(oldUser);
-    }
+//    public User updateUserService(Long id, User user){
+//        User oldUser = null;
+//        if(userRepository.findById(id).isPresent()){
+//            oldUser = userRepository.findById(id).get();
+//
+//            if((user.getFirstName() == null || user.getLastName() == null) && user.getPassword() == null){
+//                throw new IllegalStateException("Please fill all the fields");
+//            }
+//
+//            if(user.getPassword() != null && (user.getFirstName() == null && user.getLastName() == null)){
+//                oldUser.setPassword(user.getPassword());
+//            }
+//            if (user.getFirstName() != null && user.getLastName() != null && (user.getPassword() == null)){
+//                oldUser.setFirstName(user.getFirstName());
+//                oldUser.setLastName(user.getLastName());
+//            }
+//
+//            if (user.getFirstName() != null && user.getLastName() != null && user.getPassword() != null) {
+//                oldUser.setFirstName(user.getFirstName());
+//                oldUser.setLastName(user.getLastName());
+//                oldUser.setPassword(user.getPassword());
+//            }
+//        } else {
+//            throw new IllegalStateException("User not found");
+//        }
+//        return userRepository.save(oldUser);
+//    }
 
     public User deleteUserService(Long id){
         User oldUser = null;
@@ -70,7 +73,31 @@ public class UserService {
     }
 
     public List<User> getAllUserService(){
-        return userRepository.findAll();
+        return userRepository.findAllByUserStatus("active");
     }
 
+    public User editSessionUserPasswordService(Long id, String password){
+        User sessionUser = null;
+        if(userRepository.findById(id).isPresent()){
+            sessionUser = userRepository.findById(id).get();
+            sessionUser.setPassword(password);
+        } else {
+            throw new IllegalStateException("User not found");
+        }
+        return userRepository.save(sessionUser);
+    }
+
+    public String validateSessionUserPasswordService(Long id, String password) {
+        User sessionUser = null;
+        if(userRepository.findById(id).isPresent()){
+            sessionUser = userRepository.findById(id).get();
+            if(sessionUser.getPassword().equals(password)){
+                return "true";
+            } else {
+                return "false";
+            }
+        } else {
+            throw new IllegalStateException("User not found");
+        }
+    }
 }

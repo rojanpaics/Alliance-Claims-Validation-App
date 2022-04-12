@@ -1,3 +1,21 @@
+::-webkit-scrollbar {
+    width: 5px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #ccc;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
 
 .loginDiv {
     margin: 20vh auto;
@@ -48,7 +66,7 @@ input.loginField {
 }
 
 .accounting-profile-wrap {
-    height: 150px;
+    height: 170px;
 }
 
 .user-list-wrap {
@@ -118,6 +136,14 @@ input.loginField {
     border: none;
 }
 
+.modal-dropdown {
+    border-radius: 10px;
+    font-size: 14px;
+    background-color: #F2F2F2;
+    border-color: #b1b1b1;
+    border: none;
+}
+
 .cancelModal {
     border: none;
     background-color: #fff;
@@ -130,4 +156,30 @@ input.loginField {
     color: #fff;
     border-radius: 500px;
     border: none;
+}
+
+.user-wrap {
+    max-height: 248px;
+    overflow-y: auto;
+}
+
+.borderIni {
+    border-bottom: 0.7px solid #ffe6e6;
+}
+
+.userData-name {
+    color: #4F4F4F;
+}
+
+.userData-userType {
+    color: #FF8D8D;
+    font-size: 12px;
+}
+
+.sessionPassChange {
+    border: none;
+    border-radius: 100px;
+    background-color: #F91212;
+    color: #fff;
+    font-size: 12px;
 }

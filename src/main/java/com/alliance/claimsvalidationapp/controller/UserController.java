@@ -4,10 +4,7 @@ import com.alliance.claimsvalidationapp.entity.User;
 import com.alliance.claimsvalidationapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +17,15 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/")
+    @PostMapping("/addUser")
     public ModelAndView registerUserController(@ModelAttribute User user){
-        ModelAndView modelAndView = new ModelAndView();
+
+        user.setUserStatus("active");
         User savedUser = userService.registerUserService(user);
-        modelAndView.addObject("user",savedUser);
-        modelAndView.setViewName("login");
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("listOfUsers" ,userService.getAllUserService());
+        modelAndView.setViewName("accountingPage");
+
         return modelAndView;
     }
 
@@ -60,4 +60,29 @@ public class UserController {
         }
         return "login";
     }
+
+    @PostMapping("/deleteSessionUser")
+    public String deleteSessionUserController(Long id){
+        userService.deleteUserService(id);
+        return "login";
+    }
+
+//    @PostMapping("/editSessionUserPassword")
+//    public String editSessionUserController(String password, Long id){
+//        userService.updateUserPassword(password, id);
+//        return "true";
+//    }
+
+    @PostMapping("/editSessionUserPassword")
+    @ResponseBody
+    public User editSessionUserPasswordController(Long id, String password){
+        return userService.editSessionUserPasswordService(id, password);
+    }
+
+    @PostMapping("/validateSessionUserPassword")
+    @ResponseBody
+    public String validateSessionUserPassword(Long id, String password){
+        return userService.validateSessionUserPasswordService(id, password);
+    }
+
 }
