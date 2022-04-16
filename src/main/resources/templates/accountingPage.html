@@ -30,7 +30,7 @@
                         <img class="profile-act" id="editSessionUserName" data-toggle="modal"
                              data-target="#editSessionUserNameModal" th:src="@{/images/edit.svg}" alt="">
                     </div>
-                    <p class="email-display fw-light mb-3" th:text="${session.User.email}"></p>
+                    <p class="email-display fw-normal mb-3" th:text="${session.User.email}"></p>
                     <button id="editSessionUserPassword" class="sessionPassChange py-1 px-3" data-toggle="modal"
                             data-target="#editSessionUserPasswordModal">Change password</button>
                 </div>
@@ -43,28 +43,25 @@
             </div>
             <div class="userList-info bg-white px-4 py-2 shadow">
                 <div class="d-flex justify-content-between align-items-center mt-2">
-                    <input type="text" placeholder="Search name" class="loginField px-3 py-1 w-75 me-2">
-                    <select id="user_type" class="user_type w-25 ms-2 px-2 py-1">
-                        <option value="all">All</option>
-                        <option value="sales">Sales</option>
-                        <option value="tech">Tech</option>
-                        <option value="accounting">Accounting</option>
+                    <input type="text" id="searchUserField" placeholder="Search name" class="loginField px-3 py-1 w-75 me-2">
+                    <select id="user_type_search" class="user_type w-25 ms-2 px-2 py-1">
+                        <option value="All">All</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Tech">Tech</option>
+                        <option value="Accounting">Accounting</option>
                     </select>
                 </div>
                 <div class="user-wrap mt-3">
-                    <div class="userData-wrap px-3 pt-2" th:each="userData : ${listOfUsers}">
+                    <div class="userData-wrap px-3 pt-2" th:each="userData : ${listOfUsers}" th:if="${userData != session.User}">
                         <div class="borderIni d-flex justify-content-between pb-2">
                             <div class="userData-credentials">
                                 <p class="userData-name fw-bold m-0" th:text="${userData.firstName +' '+userData.lastName}"></p>
                                 <p class="userData-email email-display fw-normal m-0" th:text="${userData.email}"></p>
-                                <p class="userData-userType fw-light m-0" th:text="${userData.usertype}"></p>
+                                <p class="userData-userType fw-bold m-0" th:text="${userData.usertype}"></p>
                             </div>
-                            <img class="profile-act" id="deleteUser" th:src="@{/images/delete.svg}" alt="">
+                            <img class="profile-act deleteUser" id="deleteUser" data-toggle="modal" data-target="#deleteUserModal" th:attr="userid=${userData.id}" th:src="@{/images/delete.svg}" alt="">
                         </div>
                     </div>
-<!--                    <ul>-->
-<!--                        <li th:each = "user : ${listOfUsers}"><p th:text="${user.firstName}"></p></li>-->
-<!--                    </ul>-->
                 </div>
             </div>
         </div>
@@ -151,6 +148,24 @@
         </div>
     </div>
 
+    <!-- Modal delete other user triggered  #deleteUser -->
+    <div class="modal fade center" id="deleteUserModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6>Delete selected user</h6>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2 modal-body-label text-center my-2">Are you sure you want to delete selected user?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="cancelModal" data-dismiss="modal">Cancel</button>
+                    <button id="deleteUserButton" class="confirmModal">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal add user triggered by #addUser-->
     <div class="modal fade center" id="addUserModal">
         <div class="modal-dialog">
@@ -204,15 +219,14 @@
         crossorigin="anonymous"></script>
 <script type="text/javascript">
 var sessionID = $('.id-display').html().replace("acctng-", "");
+var sessionEmail = $('.email-display').html();
+var selectedUser;
 
-<!-- Removing own record in the user list -->
-    $(document).ready(function(){
-        $('.userData-email').each(function(){
-            if($(this).html() === $('.email-display').html()){
-                $(this).parent().parent().parent().hide();
-            }
-        });
+<!-- Getting selected user id -->
+    $('.deleteUser').click(function(){
+        selectedUser = $(this).attr('userid');
     });
+
 
 <!-- Deleting session user action -->
     $("#deleteProfileButton").click(function(){
@@ -229,10 +243,41 @@ var sessionID = $('.id-display').html().replace("acctng-", "");
        });
     });
 
- <!-- Editing session user password action -->
+<!-- Deleting user action-->
+    $("#deleteUserButton").click(function(){
+        $.ajax({
+          url: "/user/deleteSessionUser",
+          type: "POST",
+          data:{
+            id: selectedUser
+            },
+          success: function(data)
+          {
+            location.reload();
+          }
+       });
+    });
+
+ <!-- Editing session user first and last name action -->
+    $('#editProfileNameButton').click(function(){
         var fNameEdit = $('#fNameInput').val();
         var lNameEdit = $('#lNameInput').val();
+        $.ajax({
+          url: "/user/editSessionName",
+          type: "POST",
+          data:{
+            id: sessionID,
+            firstName: fNameEdit,
+            lastName: lNameEdit
+            },
+          success: function(data)
+          {
+            location.reload();
+          }
+       });
+    });
 
+ <!-- Editing password user first and last name action -->
     $('#editProfilePasswordButton').click(function(){
         var curPassEdit = $('#currentPass').val();
         var newPassEdit = $('#newPass').val();
@@ -250,7 +295,6 @@ var sessionID = $('.id-display').html().replace("acctng-", "");
                     },
                     success: function(data){
                         if(data == "true"){
-                        alert(data);
                              $.ajax({
                                 url: "/user/editSessionUserPassword",
                                 type: "POST",
@@ -264,18 +308,91 @@ var sessionID = $('.id-display').html().replace("acctng-", "");
                                         window.location = '/user/login';
                                     }
                                 }
-                            });
+                            })
                         } else {
                             alert("Wrong input on current password!");
                         }
                     }
-                });
+                })
             } else {
                 alert("Password does not match");
             }
         } else {
             alert("Wrong input on current password!1");
         }
+    });
+
+ <!-- *** FILTER USER LIST *** -->
+ <!-- Search input listener -->
+    $("#searchUserField").keyup(function(){
+        var searchInput = $(this).val().toUpperCase();
+        var searchUserType = $('#user_type_search').find(':selected').val();
+        var valueName, valueEmail, parent ,valueUserType;
+
+        $('.borderIni').each(function(indexparent){
+            $(".userData-name").each(function(indexName){
+                if(indexparent === indexName){
+                    valueName = $(this).text().toUpperCase();
+                    parent = $(this).parent().parent().parent();
+                }
+            });
+
+            $(".userData-email").each(function(indexEmail){
+                if(indexparent === indexEmail){
+                    valueEmail = $(this).text().toUpperCase();
+                    parent = $(this).parent().parent().parent();
+                }
+            });
+
+            $(".userData-userType").each(function(indexUserType){
+                if(indexparent === indexUserType){
+                    valueUserType = $(this).text();
+                    parent = $(this).parent().parent().parent();
+                }
+            });
+
+            if(((valueName.indexOf(searchInput) > -1 || valueEmail.indexOf(searchInput) > -1) || searchInput == '') && (valueUserType === searchUserType || searchUserType == "All")){
+                parent.show();
+            } else {
+                parent.hide();
+            }
+        });
+    });
+
+ <!-- User type listener -->
+    $('#user_type_search').change(function(){
+        var searchInput = $('#searchUserField').val().toUpperCase();
+        var searchUserType = $(this).find(':selected').val();
+        var valueName, valueEmail, parent ,valueUserType;
+
+        $('.borderIni').each(function(indexparent){
+            $(".userData-name").each(function(indexName){
+                if(indexparent === indexName){
+                    valueName = $(this).text().toUpperCase();
+                    parent = $(this).parent().parent().parent();
+                }
+            });
+
+            $(".userData-email").each(function(indexEmail){
+                if(indexparent === indexEmail){
+                    valueEmail = $(this).text().toUpperCase();
+                    parent = $(this).parent().parent().parent();
+                }
+            });
+
+            $(".userData-userType").each(function(indexUserType){
+                if(indexparent === indexUserType){
+                    valueUserType = $(this).text();
+                    parent = $(this).parent().parent().parent();
+                }
+            });
+
+            if(((valueName.indexOf(searchInput) > -1 || valueEmail.indexOf(searchInput) > -1) || searchInput == '') && (valueUserType === searchUserType || searchUserType == "All")){
+                parent.show();
+            } else {
+                parent.hide();
+            }
+        });
     });
 </script>
 </html>

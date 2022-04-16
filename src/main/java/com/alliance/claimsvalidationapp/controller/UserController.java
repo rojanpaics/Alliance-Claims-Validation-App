@@ -67,11 +67,12 @@ public class UserController {
         return "login";
     }
 
-//    @PostMapping("/editSessionUserPassword")
-//    public String editSessionUserController(String password, Long id){
-//        userService.updateUserPassword(password, id);
-//        return "true";
-//    }
+    @PostMapping("/deleteUser")
+    @ResponseBody
+    public void deleteUserController(Long id){
+        userService.deleteUserService(id);
+    }
+
 
     @PostMapping("/editSessionUserPassword")
     @ResponseBody
@@ -85,4 +86,9 @@ public class UserController {
         return userService.validateSessionUserPasswordService(id, password);
     }
 
+    @PostMapping("/editSessionName")
+    @ResponseBody
+    public void editSessionNameController(Long id, String firstName, String lastName){
+        userService.editSessionNameService(id, firstName, lastName);
+    }
 }

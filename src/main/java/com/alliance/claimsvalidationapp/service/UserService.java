@@ -100,4 +100,12 @@ public class UserService {
             throw new IllegalStateException("User not found");
         }
     }
+
+    public User editSessionNameService(Long id, String firstName, String lastName){
+        User sessionUser = userRepository.findById(id).get();
+        sessionUser.setLastName(lastName);
+        sessionUser.setFirstName(firstName);
+
+        return userRepository.save(sessionUser);
+    }
 }
